@@ -45,7 +45,10 @@ pipeline{
             }
         }
         stage('deploy_dev'){
-            when {expression {params.select_env == 'dev'} beforeAgent true}
+            when{
+               expression {params.select_env == 'dev'} 
+               beforeAgent true
+            }
             agent{label 'DevServer'}
             steps{
                 dir("/home/ubuntu/"){

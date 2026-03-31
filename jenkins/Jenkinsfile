@@ -15,6 +15,10 @@ pipeline{
     stages{
         stage('build'){
             steps{
+                script{
+                    file = load "script.groovy"
+                    file.hello()
+                }
                 sh 'mvn clean package -DskipTests=true'
             }
         }
@@ -50,6 +54,22 @@ pipeline{
                beforeAgent true
             }
             agent{label 'DevServer'}
+            steps{
+                dir("/home/ubuntu/"){
+                    unstash "maven-build"
+                }
+                sh """
+                cd /home/ubuntu/
+                java -jar my-app-1.0-SNAPSHOT.jar
+                """ 
+            }
+        }
+        stage('deploy_prod'){
+            when{
+               expression {params.select_env == 'prod'} 
+               beforeAgent true
+            }
+            agent{label 'ProdServer'}
             steps{
                 dir("/home/ubuntu/"){
                     unstash "maven-build"

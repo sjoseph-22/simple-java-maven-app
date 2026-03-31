@@ -37,7 +37,7 @@ pipeline{
             }
             post{
                success {
-                    '''archiveArtifacts artifacts: '**/target/*.jar'''
+                    // archiveArtifacts artifacts: '**/target/*.jar
                     dir("target/"){
                         stash name: "maven-build", includes: "*.jar"
                     }

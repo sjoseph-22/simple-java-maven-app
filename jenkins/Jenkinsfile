@@ -18,6 +18,20 @@ pipeline{
                 sh 'mvn clean package'
                 echo "Hello $NAME ${params.LASTNAME}"
             }
+        }
+        stage('test'){
+            parallel{
+                stage('testA'){
+                    steps{
+                        echo "This is testA"
+                    }
+                }
+                stage('testB'){
+                    steps{
+                        echo "This is testB"
+                    }
+                }
+            }
             post{
                success {
                     archiveArtifacts artifacts: '**/target/*.jar'
